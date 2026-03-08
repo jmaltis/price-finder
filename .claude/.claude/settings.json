@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": ["Bash(git add:*)", "Bash(git commit:*)", "Bash(git push)"],
+    "deny": [],
+    "ask": []
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run typecheck 2>&1 | grep -E 'error TS|Found [0-9]+ error' | head -10 || echo '✓ Pas d\\'erreurs TypeScript détectées'",
+            "statusMessage": "Vérification TypeScript...",
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '💡 Rappel: Pense à lancer les tests avec `npm run test` si tu as modifié de la logique'",
+            "async": true
+          }
+        ]
+      }
+    ]
+  },
+  "ENABLE_LSP_TOOL": "1"
+}
