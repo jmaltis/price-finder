@@ -1,0 +1,4 @@
+.claude/.claude/worktrees/
+.claude/.claude/settings.local.json
+node_modules/
+dist/
