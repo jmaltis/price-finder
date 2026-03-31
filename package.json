@@ -7,8 +7,7 @@
     "start": "tsx src/index.ts",
     "build": "tsc",
     "check": "tsc --noEmit && eslint src/",
-    "test": "vitest run",
-    "mcp": "tsx src/mcp-server.ts"
+    "test": "vitest run"
   },
   "engines": {
     "node": ">=20"
@@ -18,7 +17,6 @@
     "@anthropic-ai/sdk": "^0.78.0",
     "@browserbasehq/stagehand": "^3.1.0",
     "@eslint/js": "^10.0.1",
-    "@modelcontextprotocol/sdk": "^1.29.0",
     "@types/node": "^25.3.5",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
