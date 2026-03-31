@@ -1,0 +1,35 @@
+{
+  "name": "price-finder",
+  "version": "0.1.0",
+  "description": "Trouve le prix le moins cher d'un article sur internet (livraison France)",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "check": "tsc --noEmit && eslint src/",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "private": true,
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "@browserbasehq/stagehand": "^3.1.0",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.3.5",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.3.1",
+    "jsonrepair": "^3.13.2",
+    "playwright": "^1.58.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "eslint": "^10.0.3"
+  }
+}
