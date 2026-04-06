@@ -53,7 +53,7 @@ function isValidResult(result: ExtractResult | null): boolean {
 
 let stagehandInstance: Stagehand | null = null;
 
-async function getStagehand(): Promise<Stagehand> {
+export async function getStagehand(): Promise<Stagehand> {
   if (!stagehandInstance) {
     stagehandInstance = new Stagehand({
       env: 'LOCAL',
@@ -72,7 +72,7 @@ export async function closeStagehand(): Promise<void> {
   }
 }
 
-async function dismissCookies(page: Page): Promise<void> {
+export async function dismissCookies(page: Page): Promise<void> {
   for (const selector of COOKIE_SELECTORS) {
     try {
       const count = await page.locator(selector).count();
@@ -97,6 +97,64 @@ async function findProductSelector(page: Page): Promise<string | undefined> {
     }
   }
   return undefined;
+}
+
+function fixStringifiedJson(obj: unknown): unknown {
+  if (typeof obj === 'string') {
+    const trimmed = obj.trim();
+    if ((trimmed.startsWith('[') && trimmed.endsWith(']')) ||
+        (trimmed.startsWith('{') && trimmed.endsWith('}'))) {
+      try {
+        return fixStringifiedJson(JSON.parse(trimmed));
+      } catch {
+        return obj;
+      }
+    }
+    return obj;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(fixStringifiedJson);
+  }
+  if (obj !== null && typeof obj === 'object') {
+    const fixed: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+      fixed[key] = fixStringifiedJson(value);
+    }
+    return fixed;
+  }
+  return obj;
+}
+
+function extractRawValue(err: unknown): unknown | null {
+  if (err && typeof err === 'object') {
+    const e = err as Record<string, unknown>;
+    if ('value' in e && e.value !== undefined) return e.value;
+    if ('cause' in e && e.cause) return extractRawValue(e.cause);
+  }
+  return null;
+}
+
+/** Wrapper stagehand.extract() qui corrige le bug Haiku (array renvoyé en string JSON) */
+export async function robustExtract<T extends z.ZodType>(
+  stagehand: Stagehand,
+  instruction: string,
+  schema: T,
+  options?: { selector?: string }
+): Promise<z.infer<T>> {
+  try {
+    return await stagehand.extract(instruction, schema, options);
+  } catch (err) {
+    const raw = extractRawValue(err);
+    if (raw) {
+      const fixed = fixStringifiedJson(raw);
+      const result = schema.safeParse(fixed);
+      if (result.success) {
+        logger.info('  🔧 Résultat corrigé (JSON stringifié par le LLM)');
+        return result.data as z.infer<T>;
+      }
+    }
+    throw err;
+  }
 }
 
 export async function extractWithStagehand(
@@ -125,7 +183,7 @@ export async function extractWithStagehand(
     const productSelector = await findProductSelector(page);
     if (productSelector) {
       logger.info(`  🎯 Extraction ciblée: ${productSelector}`);
-      result = await stagehand.extract(instruction, ProductSchema, { selector: productSelector });
+      result = await robustExtract(stagehand, instruction, ProductSchema, { selector: productSelector });
 
       if (!isValidResult(result)) {
         logger.info('  ↩️  Résultat insuffisant, retry full page');
@@ -135,7 +193,7 @@ export async function extractWithStagehand(
 
     if (!result) {
       logger.info('  📄 Extraction full page');
-      result = await stagehand.extract(instruction, ProductSchema);
+      result = await robustExtract(stagehand, instruction, ProductSchema);
     }
 
     if (!isValidResult(result)) {
