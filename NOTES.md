@@ -1,6 +1,18 @@
-# Price Finder — Notes de conception
+# Scraping Lab — Notes de conception
 
-## Objectif
+Ce repo est un lab de prototypes de scraping web partageant la même stack
+(Apify + Bright Data + Stagehand + Claude). Chaque pipeline a son propre dossier
+sous `src/` et peut réutiliser les wrappers et utils communs.
+
+Pipelines en cours :
+- **price-finder** — trouver le prix le moins cher d'un article (en place, voir ci-dessous)
+- **lead-finder** — découvrir des commerces locaux à fort trafic sans site web (à venir)
+
+---
+
+## Pipeline : price-finder
+
+### Objectif
 Trouver automatiquement le prix le moins cher pour un article donné, livrable en France,
 et suivre l'évolution du prix dans le temps (alertes si baisse).
 

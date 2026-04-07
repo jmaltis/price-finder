@@ -1,7 +1,7 @@
 {
-  "name": "price-finder",
+  "name": "scraping-lab",
   "version": "0.1.0",
-  "description": "Trouve le prix le moins cher d'un article sur internet (livraison France)",
+  "description": "Lab de prototypes de scraping web (price finder, lead finder, etc.) sur stack Apify + Bright Data + Stagehand + Claude",
   "type": "module",
   "scripts": {
     "start": "tsx src/index.ts",
