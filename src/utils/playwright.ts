@@ -22,10 +22,11 @@ export async function fetchHtmlPlaywright(
   options?: { timeoutMs?: number }
 ): Promise<string | null> {
   const timeout = options?.timeoutMs ?? 15_000;
+  let context: Awaited<ReturnType<Browser['newContext']>> | null = null;
 
   try {
     const browser = await getBrowser();
-    const context = await browser.newContext({
+    context = await browser.newContext({
       locale: 'fr-FR',
       userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
     });
@@ -37,12 +38,14 @@ export async function fetchHtmlPlaywright(
     await page.waitForTimeout(2000);
 
     const html = await page.content();
-    await context.close();
-
     return html;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Erreur inconnue';
     logger.warn(`📄 Playwright échoué pour ${url}: ${message}`);
     return null;
+  } finally {
+    if (context) {
+      await context.close().catch(() => undefined);
+    }
   }
 }

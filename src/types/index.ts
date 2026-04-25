@@ -15,3 +15,18 @@ export type {
   ProviderConfig,
   UsageMetrics
 } from './llm.js';
+export type {
+  LeadBatchManifest,
+  LeadContact,
+  LeadContactChannel,
+  LeadContactConfidence,
+  LeadPriorityTier,
+  LeadQualified,
+  LeadRaw,
+  LeadScore,
+  LeadSourceSnapshot,
+  LeadStatus,
+  OutreachDraft,
+  WebsiteDraft,
+  WebsiteStatus
+} from './lead-finder.js';

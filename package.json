@@ -5,6 +5,15 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/index.ts",
+    "lead": "tsx src/lead-finder/cli.ts",
+    "lead:scan": "tsx src/lead-finder/cli.ts scan",
+    "lead:sync": "tsx src/lead-finder/cli.ts sync",
+    "lead:airtable:bootstrap": "tsx src/lead-finder/cli.ts airtable:bootstrap",
+    "lead:airtable:clear": "tsx src/lead-finder/cli.ts airtable:clear",
+    "lead:generate": "tsx src/lead-finder/cli.ts generate",
+    "lead:review": "tsx src/lead-finder/cli.ts review",
+    "lead:dashboard": "tsx src/lead-finder/cli.ts dashboard",
+    "lead:outreach": "tsx src/lead-finder/cli.ts outreach",
     "build": "tsc",
     "check": "tsc --noEmit && eslint src/",
     "test": "vitest run"
