@@ -7,6 +7,15 @@ export interface EnvConfig {
   browserUseApiKey?: string;
   openaiApiKey?: string;
   openrouterApiKey?: string;
+  airtableApiKey?: string;
+  airtableBaseId?: string;
+  airtableTableName?: string;
+  leadPreviewBaseUrl?: string;
+  leadPreviewOutputDir?: string;
+  googleMapsStorageStatePath?: string;
+  resendApiKey?: string;
+  outreachFromEmail?: string;
+  outreachReplyTo?: string;
 }
 
 const ENV_VAR_MAPPING: Record<keyof EnvConfig, string> = {
@@ -15,13 +24,25 @@ const ENV_VAR_MAPPING: Record<keyof EnvConfig, string> = {
   anthropicApiKey: 'ANTHROPIC_API_KEY',
   browserUseApiKey: 'BROWSER_USE_API_KEY',
   openaiApiKey: 'OPENAI_API_KEY',
-  openrouterApiKey: 'OPENROUTER_API_KEY'
+  openrouterApiKey: 'OPENROUTER_API_KEY',
+  airtableApiKey: 'AIRTABLE_API_KEY',
+  airtableBaseId: 'AIRTABLE_BASE_ID',
+  airtableTableName: 'AIRTABLE_TABLE_NAME',
+  leadPreviewBaseUrl: 'LEAD_PREVIEW_BASE_URL',
+  leadPreviewOutputDir: 'LEAD_PREVIEW_OUTPUT_DIR',
+  googleMapsStorageStatePath: 'GOOGLE_MAPS_STORAGE_STATE_PATH',
+  resendApiKey: 'RESEND_API_KEY',
+  outreachFromEmail: 'OUTREACH_FROM_EMAIL',
+  outreachReplyTo: 'OUTREACH_REPLY_TO'
 };
 
 export const ENV_REQUIREMENTS = {
   search: ['brightDataApiToken'] as (keyof EnvConfig)[],
   apify: ['apifyToken'] as (keyof EnvConfig)[],
   llm: ['anthropicApiKey'] as (keyof EnvConfig)[],
+  airtable: ['airtableApiKey', 'airtableBaseId'] as (keyof EnvConfig)[],
+  preview: ['leadPreviewBaseUrl'] as (keyof EnvConfig)[],
+  outreach: ['resendApiKey', 'outreachFromEmail'] as (keyof EnvConfig)[],
   all: ['brightDataApiToken', 'apifyToken', 'anthropicApiKey'] as (keyof EnvConfig)[]
 };
 
